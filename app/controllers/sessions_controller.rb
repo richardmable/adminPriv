@@ -1,4 +1,12 @@
 class SessionsController < ApplicationController
+
+	def index
+		if current_user
+			flash[:notice] = "You are logged in as #{@currentUser.email}"
+		end
+	end
+
+
   def create
   	user = user.find_by_email(params[:email])
   	if user && user.authenticate(params[:password])
@@ -16,5 +24,10 @@ class SessionsController < ApplicationController
   	session[:user_id] = nil
   	redirect_to root_path
   end
-  
+
+	private
+	
+	def session_params
+		params.require(:session).permit(:session_id)
+	end
 end
